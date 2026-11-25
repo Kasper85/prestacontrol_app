@@ -33,10 +33,15 @@ class ApiClient {
     http.Client? client,
   }) : _client = client ?? http.Client();
 
+  static Uri _buildUri(String path) {
+    final base = ApiConfig.baseUrl.replaceAll(RegExp(r'/+$'), '');
+    return Uri.parse('$base$path');
+  }
+
   Future<http.Response> get(String path) async {
     final headers = await _authHeaders();
     final response = await _client
-        .get(Uri.parse('${ApiConfig.baseUrl}$path'), headers: headers)
+        .get(_buildUri(path), headers: headers)
         .timeout(const Duration(seconds: 15));
     await _handleUnauthorized(response);
     return response;
@@ -52,7 +57,7 @@ class ApiClient {
         : {'Content-Type': 'application/json'};
     final response = await _client
         .post(
-          Uri.parse('${ApiConfig.baseUrl}$path'),
+          _buildUri(path),
           headers: headers,
           body: jsonEncode(body),
         )
@@ -67,7 +72,7 @@ class ApiClient {
     final headers = await _authHeaders();
     final response = await _client
         .put(
-          Uri.parse('${ApiConfig.baseUrl}$path'),
+          _buildUri(path),
           headers: headers,
           body: jsonEncode(body),
         )
@@ -79,7 +84,7 @@ class ApiClient {
   Future<http.Response> delete(String path) async {
     final headers = await _authHeaders();
     final response = await _client
-        .delete(Uri.parse('${ApiConfig.baseUrl}$path'), headers: headers)
+        .delete(_buildUri(path), headers: headers)
         .timeout(const Duration(seconds: 15));
     await _handleUnauthorized(response);
     return response;
