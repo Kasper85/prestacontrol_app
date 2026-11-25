@@ -1,5 +1,7 @@
 # PrestaControl App (`prestacontrol_app`)
 
+**Autor:** Julio Rodriguez  
+
 Aplicación móvil Flutter (Material 3) para gestionar cartera de préstamos consumiendo la API REST `prestamoservice` con autenticación JWT y almacenamiento seguro (`flutter_secure_storage`).
 
 ## Requisitos
